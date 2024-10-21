@@ -153,8 +153,8 @@
         }
 
         function buyRod(rodNumber, color) {
-            if (money >= 500) {
-                money -= 500; // خصم 500 من المال
+            if (money >= 100) { // تعديل السعر إلى 100
+                money -= 100; // خصم 100 من المال
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
                 currentRodColorIndex = rodNumber - 1; // تغيير لون السنارة الحالية
                 rod.style.backgroundColor = color; // تحديث لون السنارة
