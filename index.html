@@ -14,11 +14,11 @@
         #fishingArea {
             width: 600px;
             height: 400px;
+            background-color: #00bfff; /* لون البحر الأصلي */
             position: relative;
             margin: auto;
             border: 2px solid #000;
             overflow: hidden;
-            background: url('https://example.com/water-animation.gif') repeat; /* خلفية متحركة للماء */
             animation: waterWave 2s linear infinite; /* إضافة حركة للماء */
         }
         @keyframes waterWave {
@@ -36,7 +36,7 @@
             position: absolute;
             width: 5px;
             height: 100px;
-            background-color: #654321; /* لون السنارة */
+            background-color: #654321; /* لون السنارة الافتراضي */
             left: 50%;
             bottom: 0;
             transform: translateX(-50%);
@@ -86,7 +86,8 @@
         const rod = document.getElementById('rod');
         const shopContainer = document.getElementById('shopContainer');
 
-        const rodColors = ['#FF6347', '#4682B4', '#FFD700', '#ADFF2F', '#FF69B4', '#8A2BE2', '#00CED1', '#FF4500', '#FF8C00', '#00FA9A'];
+        // ألوان السنارات المختلفة
+        const rodColors = ['#FFFF00', '#32CD32', '#FF0000', '#0000FF', '#000000', '#FFFFFF', '#FFA500', '#FF69B4', '#FFC0CB', '#FFD700'];
 
         function startGame() {
             score = 0;
