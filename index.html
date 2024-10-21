@@ -56,11 +56,20 @@
             cursor: pointer;
             border: 2px solid #000;
         }
+        .sound-buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>لعبة الصيد</h1>
-    <h2>لعبة لريومتي وبس</h2> <!-- إضافة الجملة هنا -->
+    <h2>لعبة لريومتي وبس</h2>
     <div id="fishingArea">
         <div class="rod" id="rod"></div>
         <!-- الأسماك ستضاف هنا -->
@@ -69,6 +78,10 @@
     <div class="score" id="money">الفلوس: 0</div>
     <button onclick="askQuestion()">ابدأ اللعبة</button>
 
+    <div class="sound-buttons">
+        <button onclick="toggleSound()">تشغيل/كتم الصوت</button>
+    </div>
+
     <div class="shop">
         <h2>المتجر</h2>
         <div id="shopContainer"></div>
@@ -76,24 +89,19 @@
 
     <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
     <audio id="purchaseSound" src="https://www.soundjay.com/button/sounds/button-1.mp3" preload="auto"></audio>
-    <audio id="backgroundMusic" src="https://sendgb.com/lke3c9ixobY" preload="auto" loop></audio> <!-- تم إضافة الرابط الجديد هنا -->
+    <audio id="backgroundMusic" src="https://sendgb.com/lke3c9ixobY" preload="auto" loop></audio> <!-- رابط الموسيقى -->
     <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
     <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
 
     <script>
         let score = 0;
         let money = 0;
-        let currentRodColorIndex = 0; // مؤشر لون السنارة الحالية
-        const fishingArea = document.getElementById('fishingArea');
-        const rod = document.getElementById('rod');
-        const shopContainer = document.getElementById('shopContainer');
-
-        const rodColors = ['#FFFF00', '#32CD32', '#FF0000', '#0000FF', '#000000', '#FFFFFF', '#FFA500', '#FF69B4', '#FFC0CB', '#FFD700'];
+        let isMuted = false; // حالة كتم الصوت
+        const backgroundMusic = document.getElementById('backgroundMusic');
 
         function askQuestion() {
             const answer = prompt("ما اسم أكثر شخص يعشق؟");
             if (answer === "خالد") {
-                document.getElementById('backgroundMusic').play(); // تشغيل الموسيقى الخلفية عند بدء اللعبة
                 startGame();
             } else {
                 alert("جاوبي عدل يمال العافيه");
@@ -108,6 +116,9 @@
             addFish();
             document.addEventListener('mousemove', moveRod);
             setupShop();
+            if (!isMuted) {
+                backgroundMusic.play(); // تشغيل الموسيقى الخلفية عند بدء اللعبة
+            }
         }
 
         function moveRod(event) {
@@ -115,6 +126,17 @@
             const rodHeight = rod.offsetHeight;
             const y = event.clientY - rect.top - rodHeight / 2;
             rod.style.bottom = `${Math.max(0, Math.min(rect.height - rodHeight, y))}px`;
+        }
+
+        function toggleSound() {
+            isMuted = !isMuted; // عكس حالة كتم الصوت
+            if (isMuted) {
+                backgroundMusic.pause(); // كتم الصوت
+                alert("تم كتم الصوت");
+            } else {
+                backgroundMusic.play(); // تشغيل الصوت
+                alert("تم تشغيل الصوت");
+            }
         }
 
         function addFish() {
