@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
     <title>لعبة الصيد</title>
     <style>
         body {
@@ -23,8 +23,7 @@
             position: absolute;
             width: 50px;
             height: 30px;
-            background-color: red; /* يمكن تغيير اللون لكل نوع من الأسماك */
-            border-radius: 5px;
+            background-size: cover;
             transition: transform 0.2s;
         }
         .rod {
@@ -40,6 +39,17 @@
             font-size: 24px;
             margin-top: 20px;
         }
+        .shop {
+            margin-top: 20px;
+        }
+        .shop-item {
+            display: inline-block;
+            margin: 10px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border: 2px solid #000;
+        }
     </style>
 </head>
 <body>
@@ -49,18 +59,31 @@
         <!-- الأسماك ستضاف هنا -->
     </div>
     <div class="score" id="score">النقاط: 0</div>
+    <div class="score" id="money">الفلوس: 0</div>
     <button onclick="startGame()">ابدأ اللعبة</button>
+
+    <div class="shop">
+        <h2>المتجر</h2>
+        <div id="shopContainer"></div>
+    </div>
 
     <script>
         let score = 0;
+        let money = 0;
         const fishingArea = document.getElementById('fishingArea');
         const rod = document.getElementById('rod');
+        const shopContainer = document.getElementById('shopContainer');
+
+        const rodColors = ['#FF6347', '#4682B4', '#FFD700', '#ADFF2F', '#FF69B4', '#8A2BE2', '#00CED1', '#FF4500', '#FF8C00', '#00FA9A'];
 
         function startGame() {
             score = 0;
+            money = 0;
             document.getElementById('score').innerText = `النقاط: ${score}`;
+            document.getElementById('money').innerText = `الفلوس: ${money}`;
             addFish();
             document.addEventListener('mousemove', moveRod);
+            setupShop();
         }
 
         function moveRod(event) {
@@ -76,6 +99,10 @@
             fish.style.left = Math.random() * (fishingArea.clientWidth - 50) + 'px';
             fish.style.top = Math.random() * (fishingArea.clientHeight - 30) + 'px';
 
+            // تعيين صورة السمكة بشكل عشوائي
+            const fishType = Math.floor(Math.random() * 5) + 1; // 5 أنواع من الأسماك
+            fish.style.backgroundImage = `url('https://example.com/fish${fishType}.png')`; // قم بتغيير هذا الرابط إلى مسار الصور الحقيقي للأسماك
+
             // تعيين قيمة نقاط عشوائية للأسماك
             const value = Math.floor(Math.random() * 100) + 1;
             fish.dataset.value = value;
@@ -86,7 +113,12 @@
             // إضافة حدث النقر لصيد السمكة
             fish.addEventListener('click', () => {
                 score += value;
+                if (score >= 500) {
+                    money += 50; // زيادة الفلوس عند تحقيق 500 نقطة
+                    score = score - 500; // خصم 500 نقطة
+                }
                 document.getElementById('score').innerText = `النقاط: ${score}`;
+                document.getElementById('money').innerText = `الفلوس: ${money}`;
                 fishingArea.removeChild(fish);
             });
 
@@ -99,6 +131,28 @@
 
             // استدعاء وظيفة إضافة سمكة جديدة
             setTimeout(addFish, 1000);
+        }
+
+        function setupShop() {
+            shopContainer.innerHTML = ''; // مسح المتجر الحالي
+            rodColors.forEach((color, index) => {
+                const shopItem = document.createElement('div');
+                shopItem.className = 'shop-item';
+                shopItem.style.backgroundColor = color;
+                shopItem.innerText = `سنارة ${index + 1}`;
+                shopItem.onclick = () => buyRod(index + 1);
+                shopContainer.appendChild(shopItem);
+            });
+        }
+
+        function buyRod(rodNumber) {
+            if (money >= 1000) {
+                money -= 1000; // خصم 1000 من المال
+                document.getElementById('money').innerText = `الفلوس: ${money}`;
+                alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
+            } else {
+                alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
+            }
         }
     </script>
 </body>
