@@ -109,7 +109,7 @@
 
     <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
     <audio id="purchaseSound" src="https://www.soundjay.com/button/sounds/button-1.mp3" preload="auto"></audio>
-    <audio id="backgroundMusic" src="https://u.pcloud.link/publink/show?code=XZjIby5ZzX5YT3Bgqm8Q2FlQyvnedyBRMc1k" preload="auto" loop></audio> <!-- تم إضافة الرابط الجديد هنا -->
+    <audio id="backgroundMusic" src="https://u.pcloud.link/publink/show?code=XZjIby5ZzX5YT3Bgqm8Q2FlQyvnedyBRMc1k" preload="auto" loop></audio>
     <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
     <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
 
@@ -200,26 +200,29 @@
             setTimeout(addFish, 1000);
         }
 
-function setupShop() {
-    shopContainer.innerHTML = ''; // مسح المتجر الحالي
-    rodColors.forEach((color, index) => {
-        const shopItem = document.createElement('div');
-        shopItem.className = 'shop-item';
-        shopItem.style.backgroundColor = color;
-        shopItem.innerText = `سنارة ${index + 1}`;
-        shopItem.onclick = () => buyRod(index + 1, color);
-        shopContainer.appendChild(shopItem);
-    });
-}
+        function setupShop() {
+            shopContainer.innerHTML = ''; // مسح المتجر الحالي
+            rodColors.forEach((color, index) => {
+                const shopItem = document.createElement('div');
+                shopItem.className = 'shop-item';
+                shopItem.style.backgroundColor = color;
+                shopItem.innerText = `سنارة ${index + 1}`;
+                shopItem.onclick = () => buyRod(index + 1, color);
+                shopContainer.appendChild(shopItem);
+            });
+        }
 
-function buyRod(rodNumber, color) {
-    if (money >= 100) { // تعديل السعر إلى 100
-        money -= 100; // خصم 100 من المال
-        document.getElementById('money').innerText = `الفلوس: ${money}`;
-        rod.style.backgroundColor = color; // تحديث لون السنارة
-        document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
-        alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
-    } else {
-        alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
-    }
-}
+        function buyRod(rodNumber, color) {
+            if (money >= 100) { // تعديل السعر إلى 100
+                money -= 100; // خصم 100 من المال
+                document.getElementById('money').innerText = `الفلوس: ${money}`;
+                rod.style.backgroundColor = color; // تحديث لون السنارة
+                document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
+                alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
+            } else {
+                alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
+            }
+        }
+    </script>
+</body>
+</html>
