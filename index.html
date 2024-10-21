@@ -75,8 +75,9 @@
 
     <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
     <audio id="purchaseSound" src="https://www.soundjay.com/button/sounds/button-1.mp3" preload="auto"></audio>
+    <audio id="backgroundMusic" src="https://file.io/2IXR9mXvxeD6" preload="auto" loop></audio> <!-- تم إضافة الرابط هنا -->
     <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
-    <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio">
+    <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
 
     <script>
         let score = 0;
@@ -91,6 +92,7 @@
         function askQuestion() {
             const answer = prompt("ما اسم أكثر شخص يعشق؟");
             if (answer === "خالد") {
+                document.getElementById('backgroundMusic').play(); // تشغيل الموسيقى الخلفية عند بدء اللعبة
                 startGame();
             } else {
                 alert("جاوبي عدل يمال العافيه");
