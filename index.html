@@ -61,6 +61,7 @@
             border: 2px solid #000;
             border-radius: 8px; /* زوايا دائرية */
             transition: transform 0.3s, box-shadow 0.3s;
+            background-color: #ff6347; /* لون خلفية العناصر */
         }
         .shop-item:hover {
             transform: scale(1.1); /* تكبير عند التمرير */
@@ -118,6 +119,9 @@
         let money = 0;
         let isMuted = false; // حالة كتم الصوت
         const backgroundMusic = document.getElementById('backgroundMusic');
+        const shopContainer = document.getElementById('shopContainer');
+
+        const rodColors = ['#FFFF00', '#32CD32', '#FF0000', '#0000FF', '#000000', '#FFFFFF', '#FFA500', '#FF69B4', '#FFC0CB', '#FFD700'];
 
         function askQuestion() {
             const answer = prompt("ما اسم أكثر شخص يعشق؟");
@@ -135,17 +139,15 @@
             document.getElementById('money').innerText = `الفلوس: ${money}`;
             addFish();
             document.addEventListener('mousemove', moveRod);
-            setupShop();
-            if (!isMuted) {
-                backgroundMusic.play(); // تشغيل الموسيقى الخلفية عند بدء اللعبة
-            }
+            setupShop(); // إعداد المتجر
+            backgroundMusic.play(); // تشغيل الموسيقى الخلفية عند بدء اللعبة
         }
 
         function moveRod(event) {
-            const rect = fishingArea.getBoundingClientRect();
-            const rodHeight = rod.offsetHeight;
+            const rect = document.getElementById('fishingArea').getBoundingClientRect();
+            const rodHeight = document.getElementById('rod').offsetHeight;
             const y = event.clientY - rect.top - rodHeight / 2;
-            rod.style.bottom = `${Math.max(0, Math.min(rect.height - rodHeight, y))}px`;
+            document.getElementById('rod').style.bottom = `${Math.max(0, Math.min(rect.height - rodHeight, y))}px`;
         }
 
         function toggleSound() {
@@ -162,8 +164,8 @@
         function addFish() {
             const fish = document.createElement('div');
             fish.className = 'fish';
-            fish.style.left = Math.random() * (fishingArea.clientWidth - 50) + 'px';
-            fish.style.top = Math.random() * (fishingArea.clientHeight - 30) + 'px';
+            fish.style.left = Math.random() * (document.getElementById('fishingArea').clientWidth - 50) + 'px';
+            fish.style.top = Math.random() * (document.getElementById('fishingArea').clientHeight - 30) + 'px';
 
             // تعيين صورة السمكة بشكل عشوائي (يمكن تغييرها)
             const fishType = Math.floor(Math.random() * 5) + 1; // 5 أنواع من الأسماك
@@ -174,11 +176,11 @@
             fish.dataset.value = value;
             fish.innerText = value; // إظهار قيمة النقاط
 
-            fishingArea.appendChild(fish);
+            document.getElementById('fishingArea').appendChild(fish);
 
             // إضافة حدث النقر لصيد السمكة
             fish.addEventListener('click', () => {
-                document.getElementById('catchSound').play(); // تشغيل صوت الصيد
+            document.getElementById('catchSound').play(); // تشغيل صوت الصيد
                 score += value;
                 if (score >= 500) {
                     money += 50; // زيادة الفلوس عند تحقيق 500 نقطة
@@ -186,13 +188,13 @@
                 }
                 document.getElementById('score').innerText = `النقاط: ${score}`;
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
-                fishingArea.removeChild(fish);
+                document.getElementById('fishingArea').removeChild(fish);
             });
 
             // تجديد الأسماك بعد 2 ثانية
             setTimeout(() => {
-                if (fishingArea.contains(fish)) {
-                    fishingArea.removeChild(fish);
+                if (document.getElementById('fishingArea').contains(fish)) {
+                    document.getElementById('fishingArea').removeChild(fish);
                 }
             }, 2000); // السمكة تختفي بعد 2 ثانية
 
@@ -216,7 +218,7 @@
             if (money >= 100) { // تعديل السعر إلى 100
                 money -= 100; // خصم 100 من المال
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
-                rod.style.backgroundColor = color; // تحديث لون السنارة
+                document.getElementById('rod').style.backgroundColor = color; // تحديث لون السنارة
                 document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
                 alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
             } else {
