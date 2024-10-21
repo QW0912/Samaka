@@ -9,15 +9,21 @@
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
             background-color: #87ceeb; /* لون السماء */
+            overflow: hidden;
         }
         #fishingArea {
             width: 600px;
             height: 400px;
-            background-color: #00bfff; /* لون البحر */
             position: relative;
-            overflow: hidden;
             margin: auto;
             border: 2px solid #000;
+            overflow: hidden;
+            background: url('https://example.com/water-animation.gif') repeat; /* خلفية متحركة للماء */
+            animation: waterWave 2s linear infinite; /* إضافة حركة للماء */
+        }
+        @keyframes waterWave {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 0; }
         }
         .fish {
             position: absolute;
