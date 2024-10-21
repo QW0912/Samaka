@@ -67,9 +67,15 @@
         <div id="shopContainer"></div>
     </div>
 
+    <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
+    <audio id="purchaseSound" src="https://www.soundjay.com/button/sounds/button-1.mp3" preload="auto"></audio>
+    <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
+    <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
+
     <script>
         let score = 0;
         let money = 0;
+        let currentRodColorIndex = 0; // مؤشر لون السنارة الحالية
         const fishingArea = document.getElementById('fishingArea');
         const rod = document.getElementById('rod');
         const shopContainer = document.getElementById('shopContainer');
@@ -99,7 +105,7 @@
             fish.style.left = Math.random() * (fishingArea.clientWidth - 50) + 'px';
             fish.style.top = Math.random() * (fishingArea.clientHeight - 30) + 'px';
 
-            // تعيين صورة السمكة بشكل عشوائي
+            // تعيين صورة السمكة بشكل عشوائي (يمكن تغييرها)
             const fishType = Math.floor(Math.random() * 5) + 1; // 5 أنواع من الأسماك
             fish.style.backgroundImage = `url('https://example.com/fish${fishType}.png')`; // قم بتغيير هذا الرابط إلى مسار الصور الحقيقي للأسماك
 
@@ -112,10 +118,11 @@
 
             // إضافة حدث النقر لصيد السمكة
             fish.addEventListener('click', () => {
+                document.getElementById('catchSound').play(); // تشغيل صوت الصيد
                 score += value;
                 if (score >= 500) {
                     money += 50; // زيادة الفلوس عند تحقيق 500 نقطة
-                    score = score - 500; // خصم 500 نقطة
+                    score -= 500; // خصم 500 نقطة
                 }
                 document.getElementById('score').innerText = `النقاط: ${score}`;
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
@@ -140,15 +147,18 @@
                 shopItem.className = 'shop-item';
                 shopItem.style.backgroundColor = color;
                 shopItem.innerText = `سنارة ${index + 1}`;
-                shopItem.onclick = () => buyRod(index + 1);
+                shopItem.onclick = () => buyRod(index + 1, color);
                 shopContainer.appendChild(shopItem);
             });
         }
 
-        function buyRod(rodNumber) {
-            if (money >= 1000) {
-                money -= 1000; // خصم 1000 من المال
+        function buyRod(rodNumber, color) {
+            if (money >= 500) {
+                money -= 500; // خصم 500 من المال
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
+                currentRodColorIndex = rodNumber - 1; // تغيير لون السنارة الحالية
+                rod.style.backgroundColor = color; // تحديث لون السنارة
+                document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
                 alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
             } else {
                 alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
