@@ -20,6 +20,8 @@
             border: 2px solid #000;
             overflow: hidden;
             animation: waterWave 2s linear infinite; /* إضافة حركة للماء */
+            border-radius: 15px; /* زوايا دائرية */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* ظل للعبة */
         }
         @keyframes waterWave {
             0% { background-position: 0 0; }
@@ -44,6 +46,8 @@
         .score {
             font-size: 24px;
             margin-top: 20px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* ظل للنص */
         }
         .shop {
             margin-top: 20px;
@@ -55,6 +59,12 @@
             height: 50px;
             cursor: pointer;
             border: 2px solid #000;
+            border-radius: 8px; /* زوايا دائرية */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .shop-item:hover {
+            transform: scale(1.1); /* تكبير عند التمرير */
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* تأثير الظل عند التمرير */
         }
         .sound-buttons {
             margin-top: 20px;
@@ -64,6 +74,16 @@
             font-size: 16px;
             margin: 5px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px; /* زوايا دائرية للأزرار */
+            background-color: #ff6347; /* لون خلفية الزر */
+            color: white;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* ظل للأزرار */
+        }
+        button:hover {
+            background-color: #ff4500; /* لون الخلفية عند التمرير */
+            transform: scale(1.05); /* تكبير عند التمرير */
         }
     </style>
 </head>
@@ -180,30 +200,26 @@
             setTimeout(addFish, 1000);
         }
 
-        function setupShop() {
-            shopContainer.innerHTML = ''; // مسح المتجر الحالي
-            rodColors.forEach((color, index) => {
-                const shopItem = document.createElement('div');
-                shopItem.className = 'shop-item';
-                shopItem.style.backgroundColor = color;
-                shopItem.innerText = `سنارة ${index + 1}`;
-                shopItem.onclick = () => buyRod(index + 1, color);
-                shopContainer.appendChild(shopItem);
-            });
-        }
+function setupShop() {
+    shopContainer.innerHTML = ''; // مسح المتجر الحالي
+    rodColors.forEach((color, index) => {
+        const shopItem = document.createElement('div');
+        shopItem.className = 'shop-item';
+        shopItem.style.backgroundColor = color;
+        shopItem.innerText = `سنارة ${index + 1}`;
+        shopItem.onclick = () => buyRod(index + 1, color);
+        shopContainer.appendChild(shopItem);
+    });
+}
 
-        function buyRod(rodNumber, color) {
-            if (money >= 100) { // تعديل السعر إلى 100
-                money -= 100; // خصم 100 من المال
-                document.getElementById('money').innerText = `الفلوس: ${money}`;
-                currentRodColorIndex = rodNumber - 1; // تغيير لون السنارة الحالية
-                rod.style.backgroundColor = color; // تحديث لون السنارة
-                document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
-                alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
-            } else {
-                alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
-            }
-        }
-    </script>
-</body>
-</html>
+function buyRod(rodNumber, color) {
+    if (money >= 100) { // تعديل السعر إلى 100
+        money -= 100; // خصم 100 من المال
+        document.getElementById('money').innerText = `الفلوس: ${money}`;
+        rod.style.backgroundColor = color; // تحديث لون السنارة
+        document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
+        alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
+    } else {
+        alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
+    }
+}
