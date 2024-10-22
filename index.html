@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مجموعة ألعاب ممتعة</title>
     <style>
         body {
@@ -78,7 +78,7 @@
             position: absolute;
             width: 10px; /* عرض السنارة */
             height: 100px; /* ارتفاع السنارة */
-            background-color: #654321; /* لون السنارة */
+            background-color: brown; /* لون السنارة بني */
             left: 50%;
             bottom: 0; /* وضعها في الأسفل */
             transform: translateX(-50%);
@@ -206,9 +206,7 @@
             <div id="ball"></div>
         </div>
         <button id="throwButton" onclick="throwBall()">ارمي الكرة!</button>
-        <
-
-p id="luckMessage"></p>
+        <p id="luckMessage"></p>
         <p id="finalMessage" class="win-message"></p>
         <button onclick="resetLuckGame()">إعادة اللعب</button>
     </div>
@@ -220,7 +218,9 @@ p id="luckMessage"></p>
             <div class="rod" id="rod"></div>
             <!-- الأسماك ستضاف هنا -->
         </div>
-        <div class="score" id="score">النقاط: 0</div>
+        <div class="score" id="score">النقاط: 0
+
+</div>
         <div class="score" id="money">الفلوس: 0</div>
         <button onclick="startFishingGame()">ابدأ اللعبة</button>
         <div class="shop">
@@ -425,9 +425,7 @@ p id="luckMessage"></p>
             if (timeLeft <= 0) {
                 clearInterval(wordCountdownTimer);
                 document.getElementById('wordMessage').textContent = `انتهى الوقت! الكلمة كانت: ${selectedWord.word}`;
-                document.get
-
-ElementById('wordInput').disabled = true;
+                document.getElementById('wordInput').disabled = true;
             }
         }
 
@@ -442,7 +440,9 @@ ElementById('wordInput').disabled = true;
             }
         }
 
-        // لعبة الحظ
+        // لعبة
+
+ الحظ
         let luckAttempts = 3; // عدد المحاولات
         let goalsScored = 0; // عدد الأهداف
 
