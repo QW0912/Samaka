@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
     <title>مجموعة ألعاب ممتعة</title>
     <style>
         body {
@@ -88,6 +88,22 @@
             margin-top: 20px;
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+        .shop {
+            margin-top: 20px;
+        }
+        .shop-item {
+            display: inline-block;
+            margin: 10px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background-color: #ff6347;
+            text-align: center;
+            line-height: 50px;
+            color: white;
         }
     </style>
 </head>
@@ -179,11 +195,17 @@
         <div class="score" id="score">النقاط: 0</div>
         <div class="score" id="money">الفلوس: 0</div>
         <button onclick="startFishingGame()">ابدأ اللعبة</button>
+        <div class="shop">
+            <h2>المتجر</h2>
+            <div id="shopContainer"></div>
+        </div>
     </div>
 
     <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
     <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
-    <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
+    <audio id="
+
+laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
 
     <script>
         // المتغيرات العامة
@@ -193,6 +215,7 @@
         let countTimer, countdownTimer;
         let score = 0;
         let money = 0;
+        const rodColors = ['#FFFF00', '#32CD32', '#FF0000', '#0000FF', '#000000', '#FFFFFF', '#FFA500', '#FF69B4', '#FFC0CB', '#FFD700'];
 
         // لعبة تخمين الكلمة
         const words = [
@@ -209,7 +232,7 @@
         ];
         let selectedWord, wordCountdownTimer;
 
-        // لعبة إكس أو
+        // عرض اللعبة
         function showGame(gameId) {
             document.querySelectorAll('.game-section').forEach(game => game.classList.remove('active'));
             document.getElementById(gameId).classList.add('active');
@@ -395,7 +418,9 @@
         function resetLuckGame() {
             document.getElementById('luckMessage').textContent = '';
             document.getElementById('finalMessage').textContent = '';
-            document.getElementById('ball').style.transform = 'translate(0px, 0px)';
+            document
+
+.getElementById('ball').style.transform = 'translate(0px, 0px)';
             goalsScored = 0;
             luckAttempts = 3;
             document.getElementById('throwButton').disabled = false;
@@ -436,6 +461,7 @@
             document.getElementById('money').innerText = `الفلوس: ${money}`;
             addFish();
             document.addEventListener('mousemove', moveRod);
+            setupShop(); // إعداد المتجر
         }
 
         function moveRod(event) {
@@ -485,6 +511,31 @@
             const fishingArea = document.getElementById('fishingArea');
             while (fishingArea.firstChild) {
                 fishingArea.removeChild(fishingArea.firstChild); // إزالة الأسماك الموجودة
+            }
+        }
+
+        function setupShop() {
+            const shopContainer = document.getElementById('shopContainer');
+            shopContainer.innerHTML = ''; // مسح المتجر الحالي
+            rodColors.forEach((color, index) => {
+                const shopItem = document.createElement('div');
+                shopItem.className = 'shop-item';
+                shopItem.style.backgroundColor = color;
+                shopItem.innerText = `سنارة ${index + 1}`;
+                shopItem.onclick = () => buyRod(color);
+                shopContainer.appendChild(shopItem);
+            });
+        }
+
+        function buyRod(color) {
+            if (money >= 100) { // تعديل السعر إلى 100
+                money -= 100; // خصم 100 من المال
+                document.getElementById('money').innerText = `الفلوس: ${money}`;
+                document.getElementById('rod').style.backgroundColor = color; // تحديث لون السنارة
+                document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
+                alert(`لقد اشتريت سنارة جديدة!`);
+            } else {
+                alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
             }
         }
 
