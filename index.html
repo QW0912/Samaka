@@ -2,30 +2,70 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
-    <title>لعبة الصيد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مجموعة ألعاب ممتعة</title>
     <style>
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            background-color: #87ceeb; /* لون السماء */
-            overflow: hidden;
+            background-color: #f0e68c;
         }
+        h1 {
+            color: #ff4500;
+        }
+        .game-section {
+            display: none;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #ffebcd;
+            border-radius: 15px;
+        }
+        .active {
+            display: block;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            justify-content: center;
+            margin: 20px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            border: 3px solid #000;
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff4500;
+        }
+        /* تصميم لعبة الصيد */
         #fishingArea {
             width: 600px;
             height: 400px;
-            background-color: #00bfff; /* لون البحر الأصلي */
+            background-color: #00bfff;
             position: relative;
             margin: auto;
             border: 2px solid #000;
             overflow: hidden;
-            animation: waterWave 2s linear infinite; /* إضافة حركة للماء */
-            border-radius: 15px; /* زوايا دائرية */
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* ظل للعبة */
-        }
-        @keyframes waterWave {
-            0% { background-position: 0 0; }
-            100% { background-position: 100% 0; }
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
         .fish {
             position: absolute;
@@ -38,7 +78,7 @@
             position: absolute;
             width: 5px;
             height: 100px;
-            background-color: #654321; /* لون السنارة */
+            background-color: #654321;
             left: 50%;
             bottom: 0;
             transform: translateX(-50%);
@@ -47,100 +87,355 @@
             font-size: 24px;
             margin-top: 20px;
             color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* ظل للنص */
-        }
-        .shop {
-            margin-top: 20px;
-        }
-        .shop-item {
-            display: inline-block;
-            margin: 10px;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            border: 2px solid #000;
-            border-radius: 8px; /* زوايا دائرية */
-            transition: transform 0.3s, box-shadow 0.3s;
-            background-color: #ff6347; /* لون خلفية العناصر */
-        }
-        .shop-item:hover {
-            transform: scale(1.1); /* تكبير عند التمرير */
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); /* تأثير الظل عند التمرير */
-        }
-        .sound-buttons {
-            margin-top: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 5px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px; /* زوايا دائرية للأزرار */
-            background-color: #ff6347; /* لون خلفية الزر */
-            color: white;
-            transition: background-color 0.3s, transform 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* ظل للأزرار */
-        }
-        button:hover {
-            background-color: #ff4500; /* لون الخلفية عند التمرير */
-            transform: scale(1.05); /* تكبير عند التمرير */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
     </style>
 </head>
 <body>
-    <h1>لعبة الصيد</h1>
-    <h2>لعبة لريومتي وبس</h2>
-    <div id="fishingArea">
-        <div class="rod" id="rod"></div>
-        <!-- الأسماك ستضاف هنا -->
-    </div>
-    <div class="score" id="score">النقاط: 0</div>
-    <div class="score" id="money">الفلوس: 0</div>
-    <button onclick="askQuestion()">ابدأ اللعبة</button>
+    <h1>مجموعة ألعاب ممتعة</h1>
+    <p>اختر اللعبة:</p>
+    <button onclick="showGame('ticTacToe')">لعبة إكس أو</button>
+    <button onclick="showGame('numberGuess')">لعبة تخمين الرقم</button>
+    <button onclick="showGame('fastClick')">لعبة العد السريع</button>
+    <button onclick="showGame('wordGuess')">لعبة تخمين الكلمة</button>
+    <button onclick="showGame('luckGame')">لعبة الحظ</button>
+    <button onclick="showGame('huntingGame')">لعبة الصيد</button>
 
-    <div class="sound-buttons">
-        <button onclick="toggleSound()">تشغيل/كتم الصوت</button>
+    <!-- لعبة إكس أو -->
+    <div id="ticTacToe" class="game-section">
+        <h2>لعبة إكس أو</h2>
+        <p id="status">اختر نمط اللعب:</p>
+        <button onclick="startLocalGame('friend')">اللعب مع صديق</button>
+        <button onclick="startLocalGame('computer')">اللعب ضد الكمبيوتر</button>
+        <button onclick="alert('والله مالي خلق أسوي "اللعب أونلاين" بس انتظروا لين يصير لي خلق')">اللعب أونلاين</button>
+
+        <div id="gameArea">
+            <div class="board" id="board">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+            <button onclick="resetGame()">إعادة اللعب</button>
+        </div>
     </div>
 
-    <div class="shop">
-        <h2>المتجر</h2>
-        <div id="shopContainer"></div>
+    <!-- لعبة تخمين الرقم -->
+    <div id="numberGuess" class="game-section">
+        <h2>لعبة تخمين الرقم</h2>
+        <p id="guessStatus">حاول تخمين الرقم من 1 إلى 50 (ثلاث محاولات فقط)</p>
+        <div id="guessGameArea">
+            <input type="number" id="guessInput" placeholder="أدخل رقم من 1 إلى 50" min="1" max="50">
+            <button onclick="submitGuess()">إرسال التخمين</button>
+            <p id="guessMessage"></p>
+            <button onclick="resetGuessGame()">إعادة اللعب</button>
+        </div>
+    </div>
+
+    <!-- لعبة العد السريع -->
+    <div id="fastClick" class="game-section">
+        <h2>العد السريع <span class="timer" id="countdownTimer">30</span> ثانية</h2>
+        <p id="countStatus">اضغط على الزر بأسرع وقت ممكن لتحقيق 50 نقرة!</p>
+        <button id="countButton" onclick="startCountGame()">ابدأ العد</button>
+        <p id="countMessage"></p>
+        <button onclick="resetCountGame()">إعادة اللعب</button>
+    </div>
+
+    <!-- لعبة تخمين الكلمة -->
+    <div id="wordGuess" class="game-section">
+        <h2>لعبة تخمين الكلمة</h2>
+        <p id="wordStatus">تخمين الكلمة (أي عدد من الأحرف)</p>
+        <p id="hintStatus">التلميح: <span id="hintMessage"></span></p>
+        <input type="text" id="wordInput" placeholder="أدخل كلمتك">
+        <button onclick="submitWordGuess()">إرسال التخمين</button>
+        <p id="wordMessage"></p>
+        <p>الوقت المتبقي: <span class="timer" id="wordCountdownTimer">30</span> ثانية</p>
+        <button onclick="resetWordGuess()">إعادة اللعب</button>
+    </div>
+
+    <!-- لعبة الحظ -->
+    <div id="luckGame" class="game-section">
+        <h2>لعبة الحظ</h2>
+        <p id="luckStatus">حاول أن تُدخل الكرة داخل المربع الأزرق!</p>
+        <div id="goal"><div id="ball"></div></div>
+        <button id="throwButton" onclick="throwBall()">ارمي الكرة!</button>
+        <p id="luckMessage"></p>
+        <p id="finalMessage" class="win-message"></p>
+        <button onclick="resetLuckGame()">إعادة اللعب</button>
+    </div>
+
+    <!-- لعبة الصيد -->
+    <div id="huntingGame" class="game-section">
+        <h2>لعبة الصيد</h2>
+        <div id="fishingArea">
+            <div class="rod" id="rod"></div>
+            <!-- الأسماك ستضاف هنا -->
+        </div>
+        <div class="score" id="score">النقاط: 0</div>
+        <div class="score" id="money">الفلوس: 0</div>
+        <button onclick="startFishingGame()">ابدأ اللعبة</button>
     </div>
 
     <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
-    <audio id="purchaseSound" src="https://www.soundjay.com/button/sounds/button-1.mp3" preload="auto"></audio>
-    <audio id="backgroundMusic" src="https://u.pcloud.link/publink/show?code=XZjIby5ZzX5YT3Bgqm8Q2FlQyvnedyBRMc1k" preload="auto" loop></audio>
     <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
     <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
 
     <script>
+        // المتغيرات العامة
+        let targetNumber, guessAttempts, countClicks, timeLeft;
+        const maxGuessAttempts = 3;
+        const maxClicks = 50;
+        let countTimer, countdownTimer;
         let score = 0;
         let money = 0;
-        let isMuted = false; // حالة كتم الصوت
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const shopContainer = document.getElementById('shopContainer');
 
-        const rodColors = ['#FFFF00', '#32CD32', '#FF0000', '#0000FF', '#000000', '#FFFFFF', '#FFA500', '#FF69B4', '#FFC0CB', '#FFD700'];
+        // لعبة تخمين الكلمة
+        const words = [
+            { word: "تفاح", hint: "فاكهة حمراء" },
+            { word: "موز", hint: "فاكهة صفراء طويلة" },
+            { word: "برتقال", hint: "فاكهة دائرية" },
+            { word: "عنب", hint: "فاكهة صغيرة وحامضة" },
+            { word: "بطيخ", hint: "فاكهة كبيرة خضراء" },
+            { word: "بطريق", hint: "كائن يعيش في الثلج" },
+            { word: "دب", hint: "كائن كبير يعيش في الغابات" },
+            { word: "سمكة", hint: "تعيش في الماء" },
+            { word: "زرافة", hint: "حيوان طويل العنق" },
+            { word: "فيل", hint: "حيوان ضخم جداً" }
+        ];
+        let selectedWord, wordCountdownTimer;
 
-        function askQuestion() {
-            const answer = prompt("ما اسم أكثر شخص يعشق؟");
-            if (answer === "خالد") {
-                startGame();
-            } else {
-                alert("جاوبي عدل يمال العافيه");
+        // لعبة إكس أو
+        function showGame(gameId) {
+            document.querySelectorAll('.game-section').forEach(game => game.classList.remove('active'));
+            document.getElementById(gameId).classList.add('active');
+            if (gameId === 'ticTacToe') resetGame();
+            if (gameId === 'numberGuess') resetGuessGame();
+            if (gameId === 'fastClick') resetCountGame();
+            if (gameId === 'wordGuess') resetWordGuess();
+            if (gameId === 'luckGame') resetLuckGame();
+            if (gameId === 'huntingGame') resetHuntingGame();
+        }
+
+        // لعبة إكس أو
+        let board, currentPlayer, gameMode;
+        const boardCells = document.querySelectorAll('.cell');
+
+        function startLocalGame(mode) {
+            gameMode = mode;
+            currentPlayer = 'X';
+            board = Array(9).fill(null);
+            document.getElementById('status').textContent = `اللاعب ${currentPlayer} يبدأ`;
+            document.getElementById('gameArea').style.display = 'block';
+            updateBoard();
+        }
+
+        function updateBoard() {
+            boardCells.forEach((cell, index) => {
+                cell.textContent = board[index];
+                cell.onclick = () => handleMove(index);
+            });
+        }
+
+        function handleMove(index) {
+            if (!board[index]) {
+                board[index] = currentPlayer;
+                updateBoard();
+                if (checkWin()) {
+                    playClapSound();
+                    document.getElementById('status').textContent = `اللاعب ${currentPlayer} فاز!`;
+                } else if (board.every(cell => cell)) {
+                    document.getElementById('status').textContent = 'تعادل!';
+                } else {
+                    switchTurn();
+                    if (gameMode === 'computer' && currentPlayer === 'O') {
+                        computerMove();
+                    }
+                }
             }
         }
 
-        function startGame() {
+        function switchTurn() {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            document.getElementById('status').textContent = `اللاعب ${currentPlayer} يلعب الآن`;
+        }
+
+        function computerMove() {
+            let availableCells = board.map((cell, index) => cell === null ? index : null).filter(index => index !== null);
+            let randomCell = availableCells[Math.floor(Math.random() * availableCells.length)];
+            handleMove(randomCell);
+        }
+
+        function checkWin() {
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6]  // Diagonals
+            ];
+            return winningCombinations.some(combination => 
+                combination.every(index => board[index] === currentPlayer)
+            );
+        }
+
+        function resetGame() {
+            startLocalGame(gameMode);
+        }
+
+        // لعبة تخمين الرقم
+        function resetGuessGame() {
+            targetNumber = Math.floor(Math.random() * 50) + 1;
+            guessAttempts = 0;
+            document.getElementById('guessMessage').textContent = '';
+            document.getElementById('guessInput').value = '';
+        }
+
+        function submitGuess() {
+            let guess = Number(document.getElementById('guessInput').value);
+            guessAttempts++;
+            if (guess === targetNumber) {
+                playClapSound();
+                document.getElementById('guessMessage').textContent = `أحسنت! لقد خمنت الرقم الصحيح: ${targetNumber}`;
+            } else if (guessAttempts >= maxGuessAttempts) {
+                playLaughSound();
+                document.getElementById('guessMessage').textContent = `خسرت! الرقم الصحيح كان: ${targetNumber}`;
+            } else {
+                document.getElementById('guessMessage').textContent = guess > targetNumber ? 'الرقم أقل!' : 'الرقم أكبر!';
+            }
+        }
+
+        // لعبة العد السريع
+        function startCountGame() {
+            countClicks = 0;
+            timeLeft = 30;
+            countdownTimer = setInterval(updateTimer, 1000);
+            countTimer = setTimeout(endCountGame, 30000); // مؤقت 30 ثانية
+            document.getElementById('countButton').textContent = `اضغط بسرعة! (${countClicks})`;
+            document.getElementById('countButton').onclick = countClick;
+            document.getElementById('countMessage').textContent = '';
+        }
+
+        function countClick() {
+            countClicks++;
+            document.getElementById('countButton').textContent = `اضغط بسرعة! (${countClicks})`;
+            if (countClicks >= maxClicks) {
+                clearTimeout(countTimer);
+                clearInterval(countdownTimer);
+                playClapSound();
+                document.getElementById('countMessage').textContent = `أحسنت! وصلت إلى 50 نقرة!`;
+                document.getElementById('countButton').onclick = null;
+            }
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('countdownTimer').textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdownTimer);
+            }
+        }
+
+        function endCountGame() {
+            if (countClicks < maxClicks) {
+                playLaughSound();
+                document.getElementById('countMessage').textContent = `انتهى الوقت! لم تصل إلى 50 نقرة.`;
+                document.getElementById('countButton').onclick = null;
+            }
+        }
+
+        function resetCountGame() {
+            clearTimeout(countTimer);
+            clearInterval(countdownTimer);
+            document.getElementById('countButton').textContent = "ابدأ العد";
+            document.getElementById('countMessage').textContent = '';
+            document.getElementById('countdownTimer').textContent = '30';
+            countClicks = 0;
+            timeLeft = 30;
+        }
+
+        // لعبة تخمين الكلمة
+        function resetWordGuess() {
+            selectedWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById('hintMessage').textContent = selectedWord.hint;
+            document.getElementById('wordMessage').textContent = '';
+            document.getElementById('wordInput').value = '';
+            timeLeft = 30;
+            document.getElementById('wordCountdownTimer').textContent = timeLeft;
+            clearInterval(wordCountdownTimer);
+            wordCountdownTimer = setInterval(updateWordTimer, 1000);
+        }
+
+        function updateWordTimer() {
+            timeLeft--;
+            document.getElementById('wordCountdownTimer').textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(wordCountdownTimer);
+                document.getElementById('wordMessage').textContent = `انتهى الوقت! الكلمة كانت: ${selectedWord.word}`;
+                document.getElementById('wordInput').disabled = true;
+            }
+        }
+
+        function submitWordGuess() {
+            const userGuess = document.getElementById('wordInput').value;
+            if (userGuess === selectedWord.word) {
+                clearInterval(wordCountdownTimer);
+                document.getElementById('wordMessage').textContent = `أحسنت! الكلمة الصحيحة هي: ${selectedWord.word}`;
+            } else {
+                document.getElementById('wordMessage').textContent = `خسرت! حاول مرة أخرى.`;
+            }
+        }
+
+        // لعبة الحظ
+        let luckAttempts = 3; // عدد المحاولات
+        let goalsScored = 0; // عدد الأهداف
+
+        function resetLuckGame() {
+            document.getElementById('luckMessage').textContent = '';
+            document.getElementById('finalMessage').textContent = '';
+            document.getElementById('ball').style.transform = 'translate(0px, 0px)';
+            goalsScored = 0;
+            luckAttempts = 3;
+            document.getElementById('throwButton').disabled = false;
+        }
+
+        function throwBall() {
+            if (luckAttempts > 0) {
+                luckAttempts--;
+                const randomOutcome = Math.random();
+                const ball = document.getElementById('ball');
+                if (randomOutcome > 0.5) {
+                    playClapSound();
+                    goalsScored++;
+                    ball.style.transform = 'translate(0px, 50px)'; // الكرة تدخل المرمى
+                    document.getElementById('luckMessage').textContent = `هدف! الأهداف: ${goalsScored}`;
+                } else {
+                    playLaughSound();
+                    ball.style.transform = 'translate(100px, 50px)'; // الكرة تخرج من المرمى
+                    document.getElementById('luckMessage').textContent = `لم تدخل الكرة.`;
+                }
+                if (goalsScored >= 2) {
+                    document.getElementById('finalMessage').textContent = `فزت! الأهداف: ${goalsScored}`;
+                    document.getElementById('throwButton').disabled = true; // تعطيل الزر عند الفوز
+                }
+                if (luckAttempts === 0 && goalsScored < 2) {
+                    playLaughSound();
+                    document.getElementById('luckMessage').textContent = `انتهت المحاولات! الأهداف: ${goalsScored}.`;
+                    document.getElementById('throwButton').disabled = true; // تعطيل الزر عند انتهاء المحاولات
+                }
+            }
+        }
+
+        // لعبة الصيد
+        function startFishingGame() {
             score = 0;
             money = 0;
             document.getElementById('score').innerText = `النقاط: ${score}`;
             document.getElementById('money').innerText = `الفلوس: ${money}`;
             addFish();
             document.addEventListener('mousemove', moveRod);
-            setupShop(); // إعداد المتجر
-            backgroundMusic.play(); // تشغيل الموسيقى الخلفية عند بدء اللعبة
         }
 
         function moveRod(event) {
@@ -150,37 +445,19 @@
             document.getElementById('rod').style.bottom = `${Math.max(0, Math.min(rect.height - rodHeight, y))}px`;
         }
 
-        function toggleSound() {
-            isMuted = !isMuted; // عكس حالة كتم الصوت
-            if (isMuted) {
-                backgroundMusic.pause(); // كتم الصوت
-                alert("تم كتم الصوت");
-            } else {
-                backgroundMusic.play(); // تشغيل الصوت
-                alert("تم تشغيل الصوت");
-            }
-        }
-
         function addFish() {
             const fish = document.createElement('div');
             fish.className = 'fish';
             fish.style.left = Math.random() * (document.getElementById('fishingArea').clientWidth - 50) + 'px';
             fish.style.top = Math.random() * (document.getElementById('fishingArea').clientHeight - 30) + 'px';
 
-            // تعيين صورة السمكة بشكل عشوائي (يمكن تغييرها)
-            const fishType = Math.floor(Math.random() * 5) + 1; // 5 أنواع من الأسماك
-            fish.style.backgroundImage = `url('https://example.com/fish${fishType}.png')`; // قم بتغيير هذا الرابط إلى مسار الصور الحقيقي للأسماك
-
-            // تعيين قيمة نقاط عشوائية للأسماك
-            const value = Math.floor(Math.random() * 100) + 1;
+            const value = Math.floor(Math.random() * 100) + 1; // قيمة عشوائية
             fish.dataset.value = value;
             fish.innerText = value; // إظهار قيمة النقاط
-
             document.getElementById('fishingArea').appendChild(fish);
 
-            // إضافة حدث النقر لصيد السمكة
             fish.addEventListener('click', () => {
-            document.getElementById('catchSound').play(); // تشغيل صوت الصيد
+                document.getElementById('catchSound').play(); // تشغيل صوت الصيد
                 score += value;
                 if (score >= 500) {
                     money += 50; // زيادة الفلوس عند تحقيق 500 نقطة
@@ -191,39 +468,33 @@
                 document.getElementById('fishingArea').removeChild(fish);
             });
 
-            // تجديد الأسماك بعد 2 ثانية
             setTimeout(() => {
                 if (document.getElementById('fishingArea').contains(fish)) {
                     document.getElementById('fishingArea').removeChild(fish);
                 }
             }, 2000); // السمكة تختفي بعد 2 ثانية
 
-            // استدعاء وظيفة إضافة سمكة جديدة
             setTimeout(addFish, 1000);
         }
 
-        function setupShop() {
-            shopContainer.innerHTML = ''; // مسح المتجر الحالي
-            rodColors.forEach((color, index) => {
-                const shopItem = document.createElement('div');
-                shopItem.className = 'shop-item';
-                shopItem.style.backgroundColor = color;
-                shopItem.innerText = `سنارة ${index + 1}`;
-                shopItem.onclick = () => buyRod(index + 1, color);
-                shopContainer.appendChild(shopItem);
-            });
+        function resetHuntingGame() {
+            score = 0;
+            money = 0;
+            document.getElementById('score').innerText = `النقاط: ${score}`;
+            document.getElementById('money').innerText = `الفلوس: ${money}`;
+            const fishingArea = document.getElementById('fishingArea');
+            while (fishingArea.firstChild) {
+                fishingArea.removeChild(fishingArea.firstChild); // إزالة الأسماك الموجودة
+            }
         }
 
-        function buyRod(rodNumber, color) {
-            if (money >= 100) { // تعديل السعر إلى 100
-                money -= 100; // خصم 100 من المال
-                document.getElementById('money').innerText = `الفلوس: ${money}`;
-                document.getElementById('rod').style.backgroundColor = color; // تحديث لون السنارة
-                document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
-                alert(`لقد اشتريت سنارة ${rodNumber} بنجاح!`);
-            } else {
-                alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
-            }
+        // صوتيات
+        function playClapSound() {
+            document.getElementById('clapSound').play();
+        }
+
+        function playLaughSound() {
+            document.getElementById('laughSound').play();
         }
     </script>
 </body>
