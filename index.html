@@ -105,6 +105,30 @@
             line-height: 50px;
             color: white;
         }
+        /* تصميم لعبة الحظ */
+        #goal {
+            width: 100px;
+            height: 50px;
+            background-color: #007bff;
+            margin: 0 auto;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        #ball {
+            width: 20px;
+            height: 20px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            transition: transform 0.5s;
+        }
+        .win-message {
+            font-size: 3rem; /* زيادة حجم الخط عند الفوز */
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +147,7 @@
         <p id="status">اختر نمط اللعب:</p>
         <button onclick="startLocalGame('friend')">اللعب مع صديق</button>
         <button onclick="startLocalGame('computer')">اللعب ضد الكمبيوتر</button>
-        <button onclick="alert('والله مالي خلق أسوي "اللعب أونلاين" بس انتظروا لين يصير لي خلق')">اللعب أونلاين</button>
+        <button onclick="alert('ما سويته للحين، مالي خلق اسويه، اصبروا لين اسويه')">اللعب أونلاين</button>
 
         <div id="gameArea">
             <div class="board" id="board">
@@ -144,7 +168,7 @@
     <!-- لعبة تخمين الرقم -->
     <div id="numberGuess" class="game-section">
         <h2>لعبة تخمين الرقم</h2>
-        <p id="guessStatus">حاول تخمين الرقم من 1 إلى 50 (ثلاث محاولات فقط)</p>
+        <p id="guessStatus">حاول تخمين الرقم من 1 إلى 50 (سبع محاولات فقط)</p>
         <div id="guessGameArea">
             <input type="number" id="guessInput" placeholder="أدخل رقم من 1 إلى 50" min="1" max="50">
             <button onclick="submitGuess()">إرسال التخمين</button>
@@ -178,9 +202,13 @@
     <div id="luckGame" class="game-section">
         <h2>لعبة الحظ</h2>
         <p id="luckStatus">حاول أن تُدخل الكرة داخل المربع الأزرق!</p>
-        <div id="goal"><div id="ball"></div></div>
+        <div id="goal">
+            <div id="ball"></div>
+        </div>
         <button id="throwButton" onclick="throwBall()">ارمي الكرة!</button>
-        <p id="luckMessage"></p>
+        <
+
+p id="luckMessage"></p>
         <p id="finalMessage" class="win-message"></p>
         <button onclick="resetLuckGame()">إعادة اللعب</button>
     </div>
@@ -208,7 +236,7 @@
     <script>
         // المتغيرات العامة
         let targetNumber, guessAttempts, countClicks, timeLeft;
-        const maxGuessAttempts = 3;
+        const maxGuessAttempts = 7; // زيادة المحاولات إلى 7
         const maxClicks = 50;
         let countTimer, countdownTimer;
         let score = 0;
@@ -267,10 +295,11 @@
                 board[index] = currentPlayer;
                 updateBoard();
                 if (checkWin()) {
-                    playClapSound();
-                    document.getElementById('status').textContent = `اللاعب ${currentPlayer} فاز!`;
+                    alert('فائز!');
+                    resetGame();
                 } else if (board.every(cell => cell)) {
-                    document.getElementById('status').textContent = 'تعادل!';
+                    alert('تعادل!');
+                    resetGame();
                 } else {
                     switchTurn();
                     if (gameMode === 'computer' && currentPlayer === 'O') {
@@ -303,7 +332,8 @@
         }
 
         function resetGame() {
-            startLocalGame(gameMode);
+            board = Array(9).fill(null);
+            updateBoard();
         }
 
         // لعبة تخمين الرقم
@@ -318,11 +348,11 @@
             let guess = Number(document.getElementById('guessInput').value);
             guessAttempts++;
             if (guess === targetNumber) {
-                playClapSound();
-                document.getElementById('guessMessage').textContent = `أحسنت! لقد خمنت الرقم الصحيح: ${targetNumber}`;
+                alert('فائز!');
+                resetGuessGame();
             } else if (guessAttempts >= maxGuessAttempts) {
-                playLaughSound();
-                document.getElementById('guessMessage').textContent = `خسرت! الرقم الصحيح كان: ${targetNumber}`;
+                alert(`خسرت! الرقم الصحيح كان: ${targetNumber}`);
+                resetGuessGame();
             } else {
                 document.getElementById('guessMessage').textContent = guess > targetNumber ? 'الرقم أقل!' : 'الرقم أكبر!';
             }
@@ -345,9 +375,8 @@
             if (countClicks >= maxClicks) {
                 clearTimeout(countTimer);
                 clearInterval(countdownTimer);
-                playClapSound();
-                document.getElementById('countMessage').textContent = `أحسنت! وصلت إلى 50 نقرة!`;
-                document.getElementById('countButton').onclick = null;
+                alert('فائز!');
+                resetCountGame();
             }
         }
 
@@ -356,14 +385,15 @@
             document.getElementById('countdownTimer').textContent = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(countdownTimer);
+                alert('انتهى الوقت! لم تصل إلى 50 نقرة.');
+                resetCountGame();
             }
         }
 
         function endCountGame() {
             if (countClicks < maxClicks) {
-                playLaughSound();
-                document.getElementById('countMessage').textContent = `انتهى الوقت! لم تصل إلى 50 نقرة.`;
-                document.getElementById('countButton').onclick = null;
+                alert('انتهى الوقت! لم تصل إلى 50 نقرة.');
+                resetCountGame();
             }
         }
 
@@ -395,13 +425,16 @@
             if (timeLeft <= 0) {
                 clearInterval(wordCountdownTimer);
                 document.getElementById('wordMessage').textContent = `انتهى الوقت! الكلمة كانت: ${selectedWord.word}`;
-                document.getElementById('wordInput').disabled = true;
+                document.get
+
+ElementById('wordInput').disabled = true;
             }
         }
 
         function submitWordGuess() {
             const userGuess = document.getElementById('wordInput').value;
             if (userGuess === selectedWord.word) {
+                alert('فائز!');
                 clearInterval(wordCountdownTimer);
                 document.getElementById('wordMessage').textContent = `أحسنت! الكلمة الصحيحة هي: ${selectedWord.word}`;
             } else {
@@ -430,11 +463,11 @@
                 if (randomOutcome > 0.5) {
                     playClapSound();
                     goalsScored++;
-                    ball.style.transform = 'translate(0px, 50px)'; // الكرة تدخل المرمى
+                    ball.style.transform = 'translate(0px, 15px)'; // الكرة تدخل المرمى
                     document.getElementById('luckMessage').textContent = `هدف! الأهداف: ${goalsScored}`;
                 } else {
                     playLaughSound();
-                    ball.style.transform = 'translate(100px, 50px)'; // الكرة تخرج من المرمى
+                    ball.style.transform = 'translate(40px, 15px)'; // الكرة تخرج من المرمى
                     document.getElementById('luckMessage').textContent = `لم تدخل الكرة.`;
                 }
                 if (goalsScored >= 2) {
@@ -488,6 +521,10 @@
                 document.getElementById('score').innerText = `النقاط: ${score}`;
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
                 document.getElementById('fishingArea').removeChild(fish);
+                if (score >= 1000) { // تحديد الفوز
+                    alert('فائز في لعبة الصيد!');
+                    resetHuntingGame();
+                }
             });
 
             setTimeout(() => {
