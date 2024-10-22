@@ -76,11 +76,11 @@
         }
         .rod {
             position: absolute;
-            width: 5px;
-            height: 100px;
-            background-color: #654321;
+            width: 10px; /* عرض السنارة */
+            height: 100px; /* ارتفاع السنارة */
+            background-color: #654321; /* لون السنارة */
             left: 50%;
-            bottom: 0;
+            bottom: 0; /* وضعها في الأسفل */
             transform: translateX(-50%);
         }
         .score {
@@ -203,9 +203,7 @@
 
     <audio id="catchSound" src="https://www.soundjay.com/human/sounds/catch-1.mp3" preload="auto"></audio>
     <audio id="clapSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
-    <audio id="
-
-laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
+    <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="auto"></audio>
 
     <script>
         // المتغيرات العامة
@@ -418,9 +416,7 @@ laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="aut
         function resetLuckGame() {
             document.getElementById('luckMessage').textContent = '';
             document.getElementById('finalMessage').textContent = '';
-            document
-
-.getElementById('ball').style.transform = 'translate(0px, 0px)';
+            document.getElementById('ball').style.transform = 'translate(0px, 0px)';
             goalsScored = 0;
             luckAttempts = 3;
             document.getElementById('throwButton').disabled = false;
@@ -532,7 +528,6 @@ laughSound" src="https://www.soundjay.com/human/sounds/laugh-4.mp3" preload="aut
                 money -= 100; // خصم 100 من المال
                 document.getElementById('money').innerText = `الفلوس: ${money}`;
                 document.getElementById('rod').style.backgroundColor = color; // تحديث لون السنارة
-                document.getElementById('purchaseSound').play(); // تشغيل صوت شراء السنارة
                 alert(`لقد اشتريت سنارة جديدة!`);
             } else {
                 alert('ليس لديك ما يكفي من المال لشراء هذه السنارة.');
